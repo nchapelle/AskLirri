@@ -59,3 +59,8 @@ typings/
 
 # next.js build output
 .next
+
+# I was told to
+node_modules
+.DS_Store
+.env
