@@ -15,19 +15,29 @@ var spotify = new Spotify(key.spotify);
 //     id: "92d1898bda5e4d55a3f98a0fcf0c5119",
 //     secret: "b7026579bf47480983aa8e655b0e061d",
 //   });
+function spotifythis(){
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "songName",
+      message: "Which song do you want to know the info of?"
+    }
+  ]).then(function (searchSong) {
+    songName = searchSong.songName;
+    spotify.search({ type: 'track', query: songName }, function (err, data) {
+      if (err) {
+        return console.log('Error occurred: ' + err);
+      }
 
-spotify.search({ type: 'track', query: 'umbrella' }, function (err, data) {
-  if (err) {
-    return console.log('Error occurred: ' + err);
-  }
+      // console.log("------------")
+      // console.log(data.tracks.items[0]); 
+      console.log(data.tracks.items[0].artists); 
 
-  // console.log("------------")
-  // console.log(data.tracks.items[0]); 
-  console.log(data.tracks.items[0].artists); 
-
-  // console.log("---------------")
+      // console.log("---------------")
+      restartLirri();
+    });
 });
-
+};
 
 function moviethis() {
   //axios call to omdb
@@ -44,6 +54,7 @@ function moviethis() {
     axios.get("http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy").then(
       function (response) {
         console.log("The movie's rating is: " + response.data.imdbRating);
+        restartLirri();
       })
       .catch(function (error) {
         if (error.response) {
@@ -66,7 +77,10 @@ function moviethis() {
         console.log(error.config);
       });
   });
-}
+};
+
+
+  
 function lirriStart() {
   inquirer.prompt([
     {
@@ -76,9 +90,9 @@ function lirriStart() {
       choices: ["concert-this", "spotify-this-song", "movie-this", "do-what-it-says"]
     },
   ]).then(function (startLirri) {
-    console.log(startLirri.user_input);
-    console.log(startLirri.user_input == "concert-this");
-    console.log("starting switch");
+    // console.log(startLirri.user_input);
+    // console.log(startLirri.user_input == "concert-this");
+    // console.log("starting switch");
     switch (startLirri.user_input[0]) {
       case "concert-this":
         //do this
@@ -86,17 +100,24 @@ function lirriStart() {
         break;
       case "spotify-this-song":
         console.log("inside spotify fx");
+        spotifythis();
         break;
       case "movie-this":
         moviethis();
         break;
-      case "do-what-it-says":
       default:
         console.log("I am sorry that was an invalid input, please try again.");
+        restartLirri();
     }
     // console.log("switch is complete");
 
+
   });
+
+
+}
+
+function restartLirri(){
   inquirer.prompt([
     {
       type: "confirm",
@@ -107,12 +128,13 @@ function lirriStart() {
     console.log(restart.startOver)
     if (restart.startOver){
       console.log("we restarting")
+      lirriStart();
     }
     else {
       console.log("sheeeit")
     }
   });
 
-}
+};
 
 lirriStart();
