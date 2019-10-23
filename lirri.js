@@ -32,11 +32,11 @@ function spotifythis(){
       // console.log("------------")
       // console.log("1: "+songName);
       console.log("------------") 
-      console.log("2: "+data.tracks.items[0].name); 
+      console.log(data.tracks.items[0].name); 
       console.log("------------")      
-      console.log("3: "+data.tracks.items[0].artists[0].name);
+      console.log(data.tracks.items[0].artists[0].name);
       console.log("------------") 
-      console.log("4: "+data.tracks.items[0].href); 
+      console.log(data.tracks.items[0].external_urls); 
 
 
 
@@ -45,7 +45,51 @@ function spotifythis(){
     });
 });
 };
+function concertThis(){
+  console.log("We made it this far!");
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "bandName",
+      message: "Which artist's live event schedule do you want to know?"
+    }
+  ]).then(function (searchEvent) {
+    bandName = searchEvent.bandName;
+    axios.get("https://rest.bandsintown.com/artists/" + bandName + "/events?app_id=codingbootcamp").then(
+      function (response) {
+        arrLength = response.data.length;
+      for (i=0; i<arrLength; i++) {
+        console.log(response.data[i].datetime);
+        console.log(response.data[i].venue.name + "\n" +response.data[i].venue.city+","+response.data[i].venue.country);
+        console.log("------------------");
+      }
+      
+      restartLirri()
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log("---------------Data---------------");
+          console.log(error.response.data);
+          console.log("---------------Status---------------");
+          console.log(error.response.status);
+          console.log("---------------Status---------------");
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an object that comes back with details pertaining to the error that occurred.
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        console.log(error.config);
+      });
 
+  });
+
+};
 function moviethis() {
   //axios call to omdb
   //movieName = "the matrix"
@@ -105,8 +149,7 @@ function lirriStart() {
     // console.log("starting switch");
     switch (startLirri.user_input[0]) {
       case "concert-this":
-        //do this
-        console.log("inside concert this");
+        concertThis();
         break;
       case "spotify-this-song":
         console.log("inside spotify fx");
