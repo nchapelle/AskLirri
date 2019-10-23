@@ -1,7 +1,7 @@
 
 require("dotenv").config();
 var key = require("./key.js");
-
+var fs = require('fs');
 var axios = require("axios");
 var Spotify = require("node-spotify-api")
 var moment = require("moment")
@@ -133,6 +133,16 @@ function moviethis() {
   });
 };
 
+function readThis(){
+  fs.readFile("random.txt",'utf8', function(err, data) {
+    if (err) throw err;
+    console.log(data)
+    fileArr = data
+    fileArr.split(", ")
+    fileArr.replace(/\"/g, "")
+    console.log(fileArr[2]);
+  });
+};
 
   
 function lirriStart() {
@@ -157,6 +167,9 @@ function lirriStart() {
         break;
       case "movie-this":
         moviethis();
+        break;
+      case "do-what-it-says":
+        readThis();
         break;
       default:
         console.log("I am sorry that was an invalid input, please try again.");
@@ -183,7 +196,7 @@ function restartLirri(){
       lirriStart();
     }
     else {
-      console.log("You have to pick yes.")
+      console.log("Thank you for testing me!")
       // restartLirri();
     }
   });
