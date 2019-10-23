@@ -30,8 +30,15 @@ function spotifythis(){
       }
 
       // console.log("------------")
-      // console.log(data.tracks.items[0]); 
-      console.log(data.tracks.items[0].artists); 
+      // console.log("1: "+songName);
+      console.log("------------") 
+      console.log("2: "+data.tracks.items[0].name); 
+      console.log("------------")      
+      console.log("3: "+data.tracks.items[0].artists[0].name);
+      console.log("------------") 
+      console.log("4: "+data.tracks.items[0].href); 
+
+
 
       // console.log("---------------")
       restartLirri();
@@ -53,7 +60,10 @@ function moviethis() {
     movieName = searchMovie.movieName;
     axios.get("http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy").then(
       function (response) {
+        console.log(response.data.TItle)
         console.log("The movie's rating is: " + response.data.imdbRating);
+        console.log("Year Released: "+response.data.Released)
+        console.log("Synopsis: "+ response.data.Plot);
         restartLirri();
       })
       .catch(function (error) {
@@ -127,11 +137,11 @@ function restartLirri(){
   ]).then(function (restart){
     console.log(restart.startOver)
     if (restart.startOver){
-      console.log("we restarting")
       lirriStart();
     }
     else {
-      console.log("sheeeit")
+      console.log("You have to pick yes.")
+      // restartLirri();
     }
   });
 
